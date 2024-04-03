@@ -1,4 +1,5 @@
 import authentication from "../../support/PageObjects/authenticationPage";
+import authHelper from "../../support/helpers/authHelper";
 
 
 import * as users from "../../fixtures/userCredentials.json";
@@ -11,8 +12,7 @@ import * as errors from "../../fixtures/errorMessages.json";
 describe("Caso de uso - Autenticar", () => {
 
   beforeEach(() => {
-    const baseUrl: string | null = Cypress.config("baseUrl");
-    cy.visit(`${baseUrl}/index.html`);
+    authHelper.visit();
   });
 
 
