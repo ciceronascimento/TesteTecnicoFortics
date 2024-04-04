@@ -1,77 +1,75 @@
-import authentication from "../../support/PageObjects/authenticationPage";
-import authHelper from "../../support/helpers/authHelper";
+
+// para organizaçao serao passados primeiros os pageObjects, depois os helpers e por fim os fixtures
+
+import authenticationPage from "../../support/PageObjects/authenticationPage";
 import inventoryPage from "../../support/PageObjects/inventoryPage";
 
+import authHelper from "../../support/helpers/authHelper";
+import verifyUrlHelper from "../../support/helpers/verifyUrlHelper";
 
 import * as users from "../../fixtures/userCredentials.json";
-
 import * as errors from "../../fixtures/errorMessages.json";
 
-// const user: { username: string; password: string }[] = users;
 
+// Testes de autenticação com finalidade de validar o funcionamento correto do login
 
 describe("Caso de uso - Autenticar", () => {
-
   beforeEach(() => {
     authHelper.visit();
   });
 
-
   it("Autenticar com credenciais válidas", () => {
-    authentication.username.type(users.standard_user.username);
-    authentication.password.type(users.standard_user.password);
-    authentication.loginButton.click();
-    cy.url().should("include", "inventory.html");
+    authenticationPage.username.type(users.standard_user.username);
+    authenticationPage.password.type(users.standard_user.password);
+    authenticationPage.loginButton.click();
+    verifyUrlHelper.verifyInventory();
   });
 
   it("Autenticar com usuario inválido", () => {
-    authentication.username.type(users.incorrected_user.username);
-    authentication.password.type(users.incorrected_password.password);
-    authentication.loginButton.click();
-    authentication.errorMessage.should("have.text", errors.invalid_username.error);
+    authenticationPage.username.type(users.incorrected_user.username);
+    authenticationPage.password.type(users.incorrected_password.password);
+    authenticationPage.loginButton.click();
+    authenticationPage.errorMessage.should("have.text", errors.invalid_username.error);
   });
 
   it("Autenticar com senha inválida", () => {
-    authentication.username.type(users.standard_user.username);
-    authentication.password.type(users.incorrected_password.password);
-    authentication.loginButton.click();
-    authentication.errorMessage.should("have.text", errors.invalid_password.error);
+    authenticationPage.username.type(users.standard_user.username);
+    authenticationPage.password.type(users.incorrected_password.password);
+    authenticationPage.loginButton.click();
+    authenticationPage.errorMessage.should("have.text", errors.invalid_password.error);
   });
 
   it("Autenticar com usuário bloqueado", () => {
-    authentication.username.type(users.locked_out_user.username);
-    authentication.password.type(users.locked_out_user.password);
-    authentication.loginButton.click();
-    authentication.errorMessage.should("have.text", errors.locked_out_user.error);
+    authenticationPage.username.type(users.locked_out_user.username);
+    authenticationPage.password.type(users.locked_out_user.password);
+    authenticationPage.loginButton.click();
+    authenticationPage.errorMessage.should("have.text", errors.locked_out_user.error);
   });
 
   it("Autenticar com usuário em branco", () => {
-    authentication.password.type(users.standard_user.password);
-    authentication.loginButton.click();
-    authentication.errorMessage.should("have.text", errors.empty_username.error);
+    authenticationPage.password.type(users.standard_user.password);
+    authenticationPage.loginButton.click();
+    authenticationPage.errorMessage.should("have.text", errors.empty_username.error);
   });
 
   it("Autenticar com senha em branco", () => {
-    authentication.username.type(users.standard_user.username);
-    authentication.loginButton.click();
-    authentication.errorMessage.should("have.text", errors.empty_password.error);
+    authenticationPage.username.type(users.standard_user.username);
+    authenticationPage.loginButton.click();
+    authenticationPage.errorMessage.should("have.text", errors.empty_password.error);
   });
 
   it("Autenticar com usuário e senha em branco", () => {
-    authentication.loginButton.click();
-    authentication.errorMessage.should("have.text", errors.empty_username.error);
+    authenticationPage.loginButton.click();
+    authenticationPage.errorMessage.should("have.text", errors.empty_username.error);
   });
 
   it("Autenticar com usuário e senha válidos e sair", () => {
-    authentication.username.type(users.standard_user.username);
-    authentication.password.type(users.standard_user.password);
-    authentication.loginButton.click();
-
-    cy.url().should("include", "inventory.html");
+    authenticationPage.username.type(users.standard_user.username);
+    authenticationPage.password.type(users.standard_user.password);
+    authenticationPage.loginButton.click();
+    verifyUrlHelper.verifyInventory();
     inventoryPage.burgerMenu.click();
     inventoryPage.logoutButton.click();
-    cy.url().should("include", "index.html");
-
+    verifyUrlHelper.verifyIndex();
   });
-
 }); 
