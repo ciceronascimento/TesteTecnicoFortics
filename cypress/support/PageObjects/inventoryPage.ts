@@ -27,5 +27,13 @@ class InventoryPage {
         return cy.get(".product_sort_container");
     }
 
+    get burgerMenu() {
+        return cy.get(".bm-burger-button");
+    }
+
+    get logoutButton() {
+        return cy.get("#logout_sidebar_link");
+    }
+
 }
 export default new InventoryPage();
