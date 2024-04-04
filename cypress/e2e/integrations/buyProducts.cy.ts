@@ -7,6 +7,8 @@ import verifyUrlHelper from "../../support/helpers/verifyUrlHelper";
 import * as errorMessages from "../../fixtures/errorMessages.json";
 import * as products from "../../fixtures/inventoryProducts.json"; 
 
+import { faker } from "@faker-js/faker";
+
 // Define o tipo de products como um objeto com chave string e valor objeto
 const product = products as { [key: string]: { productName: string; description: string; price: string; ID: string; } };
 // Conta a quantidade de produtos no arquivo de fixtures
@@ -21,7 +23,7 @@ describe("Caso de uso: Testes comprar produtos", () => {
     it("Comprar um produto", () => {
         inventoryPage.inventoryItems.each(($el) => {
             const productName = $el.find(".inventory_item_name").text();
-            if(productName === "Sauce Labs Backpack") {
+            if(productName === product["Sauce Labs Backpack"].productName) {
                 $el.find(".btn_primary").click();
             }
         });
@@ -32,9 +34,9 @@ describe("Caso de uso: Testes comprar produtos", () => {
         cartPage.cartItemName.should("contain", product["Sauce Labs Backpack"].productName);
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        cartPage.firstName.type("Teste");
-        cartPage.lastName.type("Teste");
-        cartPage.postalCode.type("12345");
+        cartPage.firstName.type(faker.person.firstName());
+        cartPage.lastName.type(faker.person.lastName());
+        cartPage.postalCode.type(faker.address.zipCode());
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckoutStepTwo();
         cartPage.cartItem.should("have.length", 1);
@@ -54,9 +56,9 @@ describe("Caso de uso: Testes comprar produtos", () => {
         cartPage.cartItem.should("have.length", productCount);
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        cartPage.firstName.type("Teste");
-        cartPage.lastName.type("Teste");
-        cartPage.postalCode.type("12345");
+        cartPage.firstName.type(faker.person.firstName());
+        cartPage.lastName.type(faker.person.lastName());
+        cartPage.postalCode.type(faker.address.zipCode());
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckoutStepTwo();
         cartPage.cartItem.should("have.length", productCount);
@@ -68,7 +70,7 @@ describe("Caso de uso: Testes comprar produtos", () => {
     it("Comprar um produto e remover do carrinho", () => {
         inventoryPage.inventoryItems.each(($el) => {
             const productName = $el.find(".inventory_item_name").text();
-            if(productName === "Sauce Labs Backpack") {
+            if(productName === product["Sauce Labs Backpack"].productName) {
                 $el.find(".btn_primary").click();
             }
         });
@@ -105,9 +107,9 @@ describe("Caso de uso: Testes comprar produtos", () => {
         cartPage.cartItem.should("not.exist");
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        cartPage.firstName.type("Teste");
-        cartPage.lastName.type("Teste");
-        cartPage.postalCode.type("12345");
+        cartPage.firstName.type(faker.person.firstName());
+        cartPage.lastName.type(faker.person.lastName());
+        cartPage.postalCode.type(faker.address.zipCode());
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckoutStepTwo();
         cartPage.cartItem.should("not.exist");
@@ -119,7 +121,7 @@ describe("Caso de uso: Testes comprar produtos", () => {
     it("Comprar sem preencher o primeiro nome", () => {
         inventoryPage.inventoryItems.each(($el) => {
             const productName = $el.find(".inventory_item_name").text();
-            if(productName === "Sauce Labs Backpack") {
+            if(productName === product["Sauce Labs Backpack"].productName) {
                 $el.find(".btn_primary").click();
             }
         });
@@ -130,8 +132,8 @@ describe("Caso de uso: Testes comprar produtos", () => {
         cartPage.cartItemName.should("contain", product["Sauce Labs Backpack"].productName);
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        cartPage.lastName.type("Teste");
-        cartPage.postalCode.type("12345");
+        cartPage.lastName.type(faker.person.lastName());
+        cartPage.postalCode.type(faker.address.zipCode());
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckout();
         cartPage.errorField.should("have.text", errorMessages.empty_first_name.error);
@@ -139,47 +141,41 @@ describe("Caso de uso: Testes comprar produtos", () => {
     it("Comprar sem preencher o sobrenome", () => {
         inventoryPage.inventoryItems.each(($el) => {
             const productName = $el.find(".inventory_item_name").text();
-            if(productName === "Sauce Labs Backpack") {
+            if(productName === product["Sauce Labs Backpack"].productName) {
                 $el.find(".btn_primary").click();
             }
         });
         inventoryPage.shoppingCartBadge.should("have.text", "1");
         inventoryPage.shoppingCartLink.click();
         verifyUrlHelper.verifyCart();
-        // cy.url().should("include", "cart.html");
         cartPage.cartItem.should("have.length", 1);
         cartPage.cartItemName.should("contain", product["Sauce Labs Backpack"].productName);
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        // cy.url().should("include", "checkout-step-one.html");
-        cartPage.firstName.type("Teste");
-        cartPage.postalCode.type("12345");
+        cartPage.firstName.type(faker.person.firstName());
+        cartPage.postalCode.type(faker.address.zipCode());
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckout();
-        // cy.url().should("include", "checkout-step-one.html");
         cartPage.errorField.should("have.text", errorMessages.empty_last_name.error);
     });
     it("Comprar sem preencher o código postal", () => {
         inventoryPage.inventoryItems.each(($el) => {
             const productName = $el.find(".inventory_item_name").text();
-            if(productName === "Sauce Labs Backpack") {
+            if(productName === product["Sauce Labs Backpack"].productName) {
                 $el.find(".btn_primary").click();
             }
         });
         inventoryPage.shoppingCartBadge.should("have.text", "1");
         inventoryPage.shoppingCartLink.click();
         verifyUrlHelper.verifyCart();
-        // cy.url().should("include", "cart.html");
         cartPage.cartItem.should("have.length", 1);
         cartPage.cartItemName.should("contain", product["Sauce Labs Backpack"].productName);
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        // cy.url().should("include", "checkout-step-one.html");
-        cartPage.firstName.type("Teste");
-        cartPage.lastName.type("Teste");
+        cartPage.firstName.type(faker.person.firstName());
+        cartPage.lastName.type(faker.person.lastName());
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckout();
-        // cy.url().should("include", "checkout-step-one.html");
         cartPage.errorField.should("have.text", errorMessages.empty_zip_code.error);
     });
 
@@ -187,7 +183,7 @@ describe("Caso de uso: Testes comprar produtos", () => {
     it("Comprar codigo postal inválido", () => {
         inventoryPage.inventoryItems.each(($el) => {
             const productName = $el.find(".inventory_item_name").text();
-            if(productName === "Sauce Labs Backpack") {
+            if(productName === product["Sauce Labs Backpack"].productName) {
                 $el.find(".btn_primary").click();
             }
         });
@@ -199,8 +195,8 @@ describe("Caso de uso: Testes comprar produtos", () => {
         cartPage.cartItemName.should("contain", product["Sauce Labs Backpack"].productName);
         cartPage.checkoutButton.click();
         verifyUrlHelper.verifyCheckout();
-        cartPage.firstName.type("Teste");
-        cartPage.lastName.type("Teste");
+        cartPage.firstName.type(faker.person.firstName());
+        cartPage.lastName.type(faker.person.lastName());
         cartPage.postalCode.type("#@!#fdsfdshahauheuhsauehayeaueha");
         cartPage.continueButton.click();
         verifyUrlHelper.verifyCheckout();

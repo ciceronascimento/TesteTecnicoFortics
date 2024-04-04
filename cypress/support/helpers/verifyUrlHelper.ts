@@ -3,11 +3,9 @@ class VerifyUrlHelper {
     verifyInventory() {
         cy.url().should("include", "inventory.html");
     }
-
     verifyInventoryItem() {
         cy.url().should("include", "inventory-item.html");
     }
-
     verifyIndex() {
         cy.url().should("include", "index.html");
     }

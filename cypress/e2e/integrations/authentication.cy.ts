@@ -1,5 +1,5 @@
 
-// Para organizaçao serao passados primeiros os pageObjects, depois os helpers e por fim os fixtures
+// para organizaçao serao passados primeiros os pageObjects, depois os helpers e por fim os fixtures
 
 import authenticationPage from "../../support/PageObjects/authenticationPage";
 import inventoryPage from "../../support/PageObjects/inventoryPage";
