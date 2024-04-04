@@ -1,5 +1,6 @@
 import authentication from "../../support/PageObjects/authenticationPage";
 import authHelper from "../../support/helpers/authHelper";
+import inventoryPage from "../../support/PageObjects/inventoryPage";
 
 
 import * as users from "../../fixtures/userCredentials.json";
@@ -65,10 +66,12 @@ describe("Caso de uso - Autenticar", () => {
     authentication.username.type(users.standard_user.username);
     authentication.password.type(users.standard_user.password);
     authentication.loginButton.click();
+
     cy.url().should("include", "inventory.html");
-    cy.get(".bm-burger-button").click();
-    cy.get("#logout_sidebar_link").click();
+    inventoryPage.burgerMenu.click();
+    inventoryPage.logoutButton.click();
     cy.url().should("include", "index.html");
+
   });
 
 }); 

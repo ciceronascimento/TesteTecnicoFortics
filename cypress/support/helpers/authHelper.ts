@@ -12,6 +12,12 @@ class authHelper {
         authentication.password.type(users.standard_user.password);
         authentication.loginButton.click();
     }
+    logout() {
+        cy.url().should("include", "inventory.html");
+        cy.get(".bm-burger-button").click();
+        cy.get("#logout_sidebar_link").click();
+        cy.url().should("include", "index.html");
+    }
 }
 
 export default new authHelper();
