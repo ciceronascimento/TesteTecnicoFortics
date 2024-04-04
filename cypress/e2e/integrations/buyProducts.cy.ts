@@ -106,16 +106,8 @@ describe("Caso de uso: Testes comprar produtos", () => {
         verifyUrlHelper.verifyCart();
         cartPage.cartItem.should("not.exist");
         cartPage.checkoutButton.click();
-        verifyUrlHelper.verifyCheckout();
-        cartPage.firstName.type(faker.person.firstName());
-        cartPage.lastName.type(faker.person.lastName());
-        cartPage.postalCode.type(faker.address.zipCode());
-        cartPage.continueButton.click();
-        verifyUrlHelper.verifyCheckoutStepTwo();
-        cartPage.cartItem.should("not.exist");
-        cartPage.finishButton.click();
-        verifyUrlHelper.verifyCheckoutComplete();
-        cartPage.completeHeader.should("have.text", "THANK YOU FOR YOUR ORDER");
+        verifyUrlHelper.verifyCart();
+        cartPage.errorField.should("have.text", errorMessages.empty_cart.error);
     });
 
     it("Comprar sem preencher o primeiro nome", () => {
